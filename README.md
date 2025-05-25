@@ -1,5 +1,6 @@
 # Recursive File Type detector based on Google Magika
 
+![image](https://github.com/user-attachments/assets/46a28e22-2abc-47f6-9e8d-c19133273d95)
 
 ## Features
 
@@ -42,4 +43,3 @@ Clone the repository and run the install script:
 	  -l, --level LEVEL  Maximum depth level (5 by default)
 ```
 
-![image](https://github.com/user-attachments/assets/46a28e22-2abc-47f6-9e8d-c19133273d95)
