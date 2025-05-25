@@ -13,7 +13,7 @@ parser.add_argument('path', type=Path, help='Path to a file or directory')
 args = parser.parse_args()
 
 init(autoreset=True)
-magika = Magika(model_dir=Path('./model'))
+magika = Magika()
 print(magika)
 max_level = args.level if args.level else 5
 

@@ -7,7 +7,7 @@ pip install magika
 pip install colorama
 pip install pyinstaller
 
-pyinstaller --onefile spell.py
+pyinstaller --collect-all magika --onefile spell.py
 cp dist/spell ./spell
 
 rm spell.spec
