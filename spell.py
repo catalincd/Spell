@@ -14,7 +14,6 @@ args = parser.parse_args()
 
 init(autoreset=True)
 magika = Magika()
-print(magika)
 max_level = args.level if args.level else 5
 
 color_values = [value for name, value in vars(Fore).items() if not name.startswith("_")]
