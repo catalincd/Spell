@@ -12,7 +12,7 @@ pip install colorama
 pip install pyinstaller
 
 REM Build executable
-pyinstaller --onefile spell.py
+pyinstaller --collect-all magika --onefile spell.py
 
 REM Copy executable to current directory
 copy dist\spell.exe spell.exe
