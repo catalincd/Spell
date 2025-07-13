@@ -5,16 +5,22 @@ import shutil
 from pathlib import Path
 import random
 from colorama import init, Fore, Style
+import platform
+import subprocess
 
 parser = argparse.ArgumentParser(description="Tree with file extensions using Google Magika")
 parser.add_argument('-v', '--verbose', action='store_true', help='Enable verbose output')
 parser.add_argument('-l', '--level', type=int, help='Maximum depth level (5 by default)')
 parser.add_argument('path', type=Path, help='Path to a file or directory')
+parser.add_argument('-t', '--trid', action='store_true', help='Enable TrID')
+parser.add_argument('-p' , '--trid-path', default=('trid.exe' if platform.system() == "Windows" else 'trid'), help='Path to TrID binary')
+
 args = parser.parse_args()
 
 init(autoreset=True)
 magika = Magika()
 max_level = args.level if args.level else 5
+trid_path = args.trid_path if args.trid_path else "loco"
 
 color_values = [value for name, value in vars(Fore).items() if not name.startswith("_")]
 random.shuffle(color_values)
@@ -34,6 +40,18 @@ def get_color(file_type):
     
     return dynamic[file_type]
         
+def print_file_trid(prefix, pointer, name, path, name_len):
+    global args
+    result = subprocess.run([trid_path, os.path.abspath(path)], capture_output=True, text=True).stdout
+    result = result.replace("TrID is best suited to analyze binary files!", "")
+    result = result.replace("file seems to be ", "")
+    result = result.replace("Warning:", "")
+    trim = lambda line: " ".join(line.split()[:4])
+    formatted = " ".join(map(trim, result.splitlines()[6:10]))
+
+    padding = ' ' * (min(50, (5 + name_len - len(name))))
+    print(f'{prefix}{pointer}{path}{padding}{formatted}')
+
 
 def print_file(prefix, pointer, name, path, name_len):
     global args
@@ -66,8 +84,10 @@ def tree(directory, prefix='', level=0):
 
     for pointer, name in zip(pointers, contents):
         path = os.path.join(directory, name)
-        # print_left_and_right(prefix + pointer + name, predict_file(path))
-        print_file(prefix, pointer, name, path, name_len)
+        if args.trid:
+            print_file_trid(prefix, pointer, name, path, name_len)
+        else:
+            print_file(prefix, pointer, name, path, name_len)
 
         if os.path.isdir(path):
             extension = '│   ' if pointer == '├── ' else '     '
@@ -76,5 +96,6 @@ def tree(directory, prefix='', level=0):
 
 if __name__ == "__main__":
     directory = args.path
+    print(trid_path)
     print(directory)
     tree(directory)
